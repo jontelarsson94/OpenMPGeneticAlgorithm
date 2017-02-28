@@ -33,9 +33,10 @@ typedef struct Member
 /* Global Variables */
 std::vector<Node*> g_data;
 std::vector<Member*> g_population;
-std::vector<int> g_parentIndeces;
+Member* g_currentBest;
+Member* g_currentSecondBest;
 const int g_populationSize = 100;
-const int g_evaluationLimit = 5e5;
+const int g_evaluationLimit = 1e6;
 unsigned int g_accEvaluations;
 const int g_nParents = 2;
 const double g_mutationProbability = 0.75;
@@ -79,51 +80,47 @@ void updateFitness(Member *m)
 
 	m->fitness = acc;
 
+	#pragma omp atomic
 	g_accEvaluations++;
 
-	if (g_accEvaluations % 1000 == 0)
-		std::cout << "\r# Evaluations: " << g_accEvaluations;
+	if (g_accEvaluations % 50000 == 0)
+		std::cout << "# Evaluations: " << g_accEvaluations << " Fitness: " << g_population[0]->fitness << " Current Best: " << g_currentBest->fitness << " Current Second Best: " << g_currentSecondBest->fitness << std::endl;
 }
 
-bool myfunction(Member *i, Member *j) { return (i->fitness<j->fitness); }
+bool myfunction(Member *i, Member *j) { return (i->fitness<j->fitness); } // Used for sorting
 
 void initializePopulation()
 {
-	//#pragma omp parallel
+
+	Member *tempMember;
+	//#pragma omp parallel for private(tempMember)
+	for (int i = 0; i < g_populationSize; i++)
 	{
-		Member *tempMember;
-		//#pragma omp for
-		for (int i = 0; i < g_populationSize; i++)
+		tempMember = new Member();
+		for (int j = 0; j < g_data.size(); ++j) // Initialize each member
 		{
-			tempMember = new Member();
-			for (int j = 0; j < g_data.size(); ++j) // Initialize each member
-			{
-				tempMember->path.push_back(g_data[j]->id);
-			}
-
-			std::random_shuffle(tempMember->path.begin(), tempMember->path.end()); // Randomize initial path
-
-			updateFitness(tempMember);
-
-			g_population.push_back(tempMember);
+			tempMember->path.push_back(g_data[j]->id);
 		}
+
+		std::random_shuffle(tempMember->path.begin(), tempMember->path.end()); // Randomize initial path
+
+		updateFitness(tempMember);
+
+		//#pragma omp atomic
+		g_population.push_back(tempMember);
 	}
 
 	std::sort(g_population.begin(), g_population.end(), myfunction); // Sort ascending on fitness, using < overload
-
-	for (int i = 0; i < g_nParents; ++i)
-	{
-		g_parentIndeces.push_back(-1);
-	}
+	g_currentBest = g_population[0];
+	g_currentSecondBest = g_population[1];
 }
 
-void selectParents()
+void selectParents(int *fatherIndex, int *motherIndex)
 {
 	double totalFitness = 0.0, r, sum = 0.0, scale = 0.0;
 	std::vector<double> probability;
 	bool alreadyPicked = false, keepChoosing = true;
 	int nParentsChosen = 0;
-	g_parentIndeces.empty();
 
 	for (int i = 0; i < g_populationSize; ++i)
 	{
@@ -147,9 +144,9 @@ void selectParents()
 			sum += probability[j]; // Accumulate probability
 			if(r < sum)
 			{ 
-				for (int k = 0; k < g_parentIndeces.size(); ++k) // Avoid duplicate parents
+				for (int k = 0; k < g_nParents; ++k) // Avoid duplicate parents
 				{
-					if (g_parentIndeces[k] == j)
+					if (*fatherIndex == j)
 					{
 						alreadyPicked = true;
 						break;
@@ -157,7 +154,11 @@ void selectParents()
 				}
 				if (!alreadyPicked)
 				{
-					g_parentIndeces[nParentsChosen] = j;
+					if (nParentsChosen == 0)
+						*fatherIndex = j;
+					else
+						*motherIndex = j;
+
 					nParentsChosen++;
 				}
 
@@ -174,7 +175,7 @@ void selectParents()
 	}
 }
 
-std::vector<Member*> performCrossover()
+std::vector<Member*> performCrossover(const int &motherIndex, const int &fatherIndex)
 {
 	int startIndex, endIndex, maxIndex = g_data.size() - 1, size = maxIndex + 1, n;
 	Member *child1, *child2;
@@ -200,24 +201,24 @@ std::vector<Member*> performCrossover()
 			tempVector.push_back(-1);
 		}
 
-		for (int j = 0; j < n; ++j) // Assign genes to the first child, from the first parent
+		for (int j = 0; j < n; ++j) // Assign genes to the first child, from the father
 		{
 			if (startIndex + j > maxIndex)
 			{
-				tempVector[startIndex + j - size] = g_population[g_parentIndeces[i]]->path[startIndex + j - size];
+				tempVector[startIndex + j - size] = g_population[fatherIndex]->path[startIndex + j - size];
 				taken.push_back(tempVector[startIndex + j - size]);
 			}
 			else
 			{
-				tempVector[startIndex + j] = g_population[g_parentIndeces[i]]->path[startIndex + j];
+				tempVector[startIndex + j] = g_population[fatherIndex]->path[startIndex + j];
 				taken.push_back(tempVector[startIndex + j]);
 			}
 		}
-		for (int j = 0; j < size; ++j) // Assign genes to the first child, from the second parent
+		for (int j = 0; j < size; ++j) // Assign genes to the first child, from the mother
 		{
 			for (int k = 0; k < taken.size(); ++k) // Avoid duplicates
 			{
-				if (taken[k] == g_population[g_parentIndeces[i + 1]]->path[j])
+				if (taken[k] == g_population[motherIndex]->path[j])
 				{
 					alreadyTaken = true;
 				}
@@ -228,7 +229,7 @@ std::vector<Member*> performCrossover()
 				{
 					if (tempVector[l] == -1)
 					{
-						tempVector[l] = g_population[g_parentIndeces[i + 1]]->path[j];
+						tempVector[l] = g_population[motherIndex]->path[j];
 						break;
 					}
 				}
@@ -245,24 +246,24 @@ std::vector<Member*> performCrossover()
 			tempVector[j] = -1;
 		}
 
-		for (int j = 0; j < n; ++j) // Assign genes to the second child, from the first parent
+		for (int j = 0; j < n; ++j) // Assign genes to the second child, from the father
 		{
 			if (endIndex + j > maxIndex)
 			{
-				tempVector[endIndex + j - size] = g_population[g_parentIndeces[i]]->path[endIndex + j - size];
+				tempVector[endIndex + j - size] = g_population[fatherIndex]->path[endIndex + j - size];
 				taken.push_back(tempVector[endIndex + j - size]);
 			}
 			else
 			{
-				tempVector[endIndex + j] = g_population[g_parentIndeces[i]]->path[endIndex + j];
+				tempVector[endIndex + j] = g_population[fatherIndex]->path[endIndex + j];
 				taken.push_back(tempVector[endIndex + j]);
 			}
 		}
-		for (int j = 0; j < size; ++j) // Assign genes to the second child, from the second parent
+		for (int j = 0; j < size; ++j) // Assign genes to the second child, from the mother
 		{
 			for (int k = 0; k < taken.size(); ++k) // Avoid duplicates
 			{
-				if (taken[k] == g_population[g_parentIndeces[i + 1]]->path[j])
+				if (taken[k] == g_population[motherIndex]->path[j])
 				{
 					alreadyTaken = true;
 				}
@@ -273,7 +274,7 @@ std::vector<Member*> performCrossover()
 				{
 					if (tempVector[l] == -1)
 					{
-						tempVector[l] = g_population[g_parentIndeces[i + 1]]->path[j];
+						tempVector[l] = g_population[motherIndex]->path[j];
 						break;
 					}
 				}
@@ -317,30 +318,52 @@ void mutate(const std::vector<Member*> &children)
 	}
 }
 
-void integrateSpawn(const std::vector<Member*> &children)
-{
-	delete g_population[g_populationSize - 1];
-	delete g_population[g_populationSize - 2];
-
-	g_population[g_populationSize - 1] = children[0];
-	g_population[g_populationSize - 2] = children[1];
-}
-
 void tspGA()
 {
 	g_accEvaluations = 0;
 	initializePopulation();
+	std::vector<Member*> newPopulation;
 	std::vector<Member*> spawn;
+	int fatherIndex = -1, motherIndex = -1;
 
-	while (g_accEvaluations < g_evaluationLimit)
+	for (int i = 0; i < g_populationSize; i++)
 	{
-		selectParents();
-		spawn = performCrossover();
-		mutate(spawn);
-		integrateSpawn(spawn);
-		std::sort(g_population.begin(), g_population.end(), myfunction); // Sort ascending on fitness, using < overload;
+		newPopulation.push_back(nullptr);
+	}
 
-		spawn.empty();
+#pragma omp parallel private(spawn, fatherIndex, motherIndex)
+	{
+		while (g_accEvaluations < g_evaluationLimit)
+		{
+			#pragma omp for
+			for (int i = 1; i < g_populationSize / 2; i++)
+			{
+				selectParents(&fatherIndex, &motherIndex);
+				spawn = performCrossover(fatherIndex, motherIndex);
+				mutate(spawn);
+
+				newPopulation[i * 2] = spawn[0];
+				newPopulation[i * 2 + 1] = spawn[1];
+
+				spawn.empty();
+			}
+
+			#pragma omp single
+			{
+				for (int i = 2; i < g_population.size(); ++i)
+				{
+					delete g_population[i];
+				}
+				g_currentBest = g_population[0];
+				g_currentSecondBest = g_population[1];
+				newPopulation[0] = g_currentBest;
+				newPopulation[1] = g_currentSecondBest;
+
+				g_population = newPopulation;
+
+				std::sort(g_population.begin(), g_population.end(), myfunction); // Sort ascending on fitness, using < overload;
+			}
+		}
 	}
 }
 

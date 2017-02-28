@@ -1,0 +1,18 @@
+﻿  main.cpp
+main.cpp(39): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+main.cpp(68): warning C4018: '<': signed/unsigned mismatch
+main.cpp(100): warning C4018: '<': signed/unsigned mismatch
+main.cpp(219): warning C4018: '<': signed/unsigned mismatch
+main.cpp(264): warning C4018: '<': signed/unsigned mismatch
+main.cpp(300): warning C4018: '<': signed/unsigned mismatch
+main.cpp(353): warning C4018: '<': signed/unsigned mismatch
+main.cpp(373): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+main.cpp(381): warning C4018: '<': signed/unsigned mismatch
+main.cpp(385): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  5 of 527 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    15 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  hemtenta.vcxproj -> D:\Programming\Projects\git\OpenMPGeneticAlgorithm\Release\hemtenta.exe
+  hemtenta.vcxproj -> D:\Programming\Projects\git\OpenMPGeneticAlgorithm\Release\hemtenta.pdb (Full PDB)

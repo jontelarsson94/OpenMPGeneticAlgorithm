@@ -1,13 +1,13 @@
 ﻿  main.cpp
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(38): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(67): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(99): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(150): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(218): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(263): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(299): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(350): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(358): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\visual studio\dva223 - information - kunskap - vetenskap - etik\hemtenta\hemtenta\main.cpp(362): warning C4018: '<': signed/unsigned mismatch
-  hemtenta.vcxproj -> D:\Programming\Projects\Visual Studio\DVA223 - Information - kunskap - vetenskap - etik\hemtenta\Debug\hemtenta.exe
-  hemtenta.vcxproj -> D:\Programming\Projects\Visual Studio\DVA223 - Information - kunskap - vetenskap - etik\hemtenta\Debug\hemtenta.pdb (Partial PDB)
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(66): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(98): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(215): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(260): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(296): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(349): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(365): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(373): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(377): warning C4018: '<': signed/unsigned mismatch
+  hemtenta.vcxproj -> D:\Programming\Projects\git\OpenMPGeneticAlgorithm\Debug\hemtenta.exe
+  hemtenta.vcxproj -> D:\Programming\Projects\git\OpenMPGeneticAlgorithm\Debug\hemtenta.pdb (Partial PDB)
