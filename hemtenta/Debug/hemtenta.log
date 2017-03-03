@@ -1,13 +1,13 @@
 ﻿  main.cpp
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(66): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(98): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(215): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(260): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(296): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(349): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(365): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(373): warning C4018: '<': signed/unsigned mismatch
-d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(377): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(40): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(69): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(101): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(220): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(265): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(301): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(355): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(378): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(386): warning C4018: '<': signed/unsigned mismatch
+d:\programming\projects\git\openmpgeneticalgorithm\hemtenta\main.cpp(390): warning C4018: '<': signed/unsigned mismatch
   hemtenta.vcxproj -> D:\Programming\Projects\git\OpenMPGeneticAlgorithm\Debug\hemtenta.exe
   hemtenta.vcxproj -> D:\Programming\Projects\git\OpenMPGeneticAlgorithm\Debug\hemtenta.pdb (Partial PDB)

@@ -5,6 +5,7 @@
 #include <ctime>
 #include <algorithm>
 #include <omp.h>
+#include <chrono>
 
 typedef struct Node
 {
@@ -35,8 +36,8 @@ std::vector<Node*> g_data;
 std::vector<Member*> g_population;
 Member* g_currentBest;
 Member* g_currentSecondBest;
-const int g_populationSize = 100;
-const int g_evaluationLimit = 1e6;
+const int g_populationSize = 60;
+const int g_evaluationLimit = 3e5;
 unsigned int g_accEvaluations;
 const int g_nParents = 2;
 const double g_mutationProbability = 0.75;
@@ -83,7 +84,7 @@ void updateFitness(Member *m)
 	#pragma omp atomic
 	g_accEvaluations++;
 
-	if (g_accEvaluations % 50000 == 0)
+	if (g_accEvaluations % 10000 == 0 && g_currentBest != nullptr && g_currentSecondBest != nullptr)
 		std::cout << "# Evaluations: " << g_accEvaluations << " Fitness: " << g_population[0]->fitness << " Current Best: " << g_currentBest->fitness << " Current Second Best: " << g_currentSecondBest->fitness << std::endl;
 }
 
@@ -331,6 +332,7 @@ void tspGA()
 		newPopulation.push_back(nullptr);
 	}
 
+	auto start = std::chrono::high_resolution_clock::now();
 #pragma omp parallel private(spawn, fatherIndex, motherIndex)
 	{
 		while (g_accEvaluations < g_evaluationLimit)
@@ -365,6 +367,9 @@ void tspGA()
 			}
 		}
 	}
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start).count();
+	std::cout << "Total time = " << duration << " seconds\n";
 }
 
 int main()
